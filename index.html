@@ -1,0 +1,1051 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Build Your Memory Lane</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="landing" id="landing">
+      <div class="landing-card">
+        <h1>Build Your Memory Lane</h1>
+        <p>Create a chronological photo timeline with your digital memories.</p>
+        <div class="start">
+          <button id="start-btn" class="button">Start Creating <3</button>
+        </div>
+      </div>
+      <div class="landing-glitter" aria-hidden="true">
+        <span class="glitter-dot"></span>
+        <span class="glitter-dot"></span>
+        <span class="glitter-dot"></span>
+        <span class="glitter-dot"></span>
+        <span class="glitter-dot"></span>
+        <span class="glitter-dot"></span>
+      </div>
+    </div>
+
+    <main class="app-shell" id="app-shell" style="display: none">
+      <nav class="tabs" role="tablist" aria-label="Memory Lane sections">
+        <button
+          id="landing-btn"
+          class="tab-btn"
+          type="button"
+          aria-label="Return to home"
+        >
+          <span class="tab-icon" aria-hidden="true">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3 10L12 3L21 10V21H14V14H10V21H3V10Z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          Home
+        </button>
+        <button
+          id="tab-btn-upload"
+          class="tab-btn active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-upload"
+        >
+          <span class="tab-icon" aria-hidden="true">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 16V4M12 4L7 9M12 4L17 9"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M4 16V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V16"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          Upload Photos
+        </button>
+        <button
+          id="tab-btn-timeline"
+          class="tab-btn"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-timeline"
+        >
+          <span class="tab-icon" aria-hidden="true">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="5" cy="12" r="2" fill="currentColor" />
+              <circle cx="12" cy="12" r="2" fill="currentColor" />
+              <circle cx="19" cy="12" r="2" fill="currentColor" />
+              <path
+                d="M7 12H10M14 12H17"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+          Timeline Overview
+        </button>
+      </nav>
+
+      <section
+        id="panel-upload"
+        class="tab-panel active"
+        role="tabpanel"
+        aria-labelledby="tab-btn-upload"
+      >
+        <section class="section intro-section">
+          <div class="upload-grid">
+            <div class="upload-column">
+              <h2 class="upload-title">📸 Add photos to your Memory Lane</h2>
+              <p class="muted">Images are ordered by its date taken!</p>
+              <div class="upload-area" id="dropzone">
+                <input
+                  id="file-input"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  hidden
+                />
+                <p class="muted">Select Memories to Upload</p>
+                <p class="upload-hint">
+                  or drag and drop up to 10 photos per upload.
+                </p>
+                <button id="select-btn" class="button">Select photos</button>
+                <p
+                  id="upload-warning"
+                  class="upload-warning"
+                  style="display: none"
+                ></p>
+
+                <div
+                  id="progress-overlay"
+                  class="progress-overlay"
+                  style="display: none"
+                >
+                  <div class="progress-body">
+                    <div class="progress-label">Processing Memories!</div>
+                    <div class="progress-container">
+                      <div id="progress-bar" class="progress-bar"></div>
+                    </div>
+                    <div id="progress-text" class="progress-text">0%</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="uploaded-heading-row">
+                <h2
+                  class="uploaded-heading"
+                  id="uploaded-heading"
+                  style="display: none"
+                >
+                  Uploaded Memories
+                </h2>
+                <div
+                  class="uploaded-heading-actions"
+                  id="uploaded-heading-actions"
+                ></div>
+              </div>
+              <div class="uploaded-grid" id="uploaded-grid"></div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section
+        id="panel-timeline"
+        class="tab-panel"
+        role="tabpanel"
+        aria-labelledby="tab-btn-timeline"
+      >
+        <section class="section overview-section">
+          <div class="overview-header">
+            <div>
+              <h2 class="upload-title">🎞️ Your Memory Lane</h2>
+              <p class="muted">
+                All uploaded photos, arranged left to right in chronological
+                order. Add a special title or description to any photo by clicking on it!
+              </p>
+            </div>
+            <div class="overview-actions">
+              <label class="sort-label" for="sort-select">Sort:</label>
+              <select
+                id="sort-select"
+                class="sort-dropdown"
+                aria-label="Sort order"
+              >
+                <option value="asc">Oldest to recent</option>
+                <option value="desc">Recent to oldest</option>
+              </select>
+              <button
+                id="recenter-btn"
+                class="icon-btn"
+                type="button"
+                title="Recenter timeline"
+                aria-label="Recenter timeline"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M12 2V6M12 18V22M2 12H6M18 12H22"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="overview-canvas-wrap">
+            <div class="timeline-controls">
+              <button
+                id="zoom-out-btn"
+                class="timeline-control-btn"
+                type="button"
+                aria-label="Zoom out"
+              >
+                −
+              </button>
+              <button
+                id="zoom-in-btn"
+                class="timeline-control-btn"
+                type="button"
+                aria-label="Zoom in"
+              >
+                +
+              </button>
+            </div>
+            <div class="overview-canvas" id="overview-canvas">
+              <div class="overview-track" id="overview-track">
+                <!-- horizontal timeline items inserted here -->
+              </div>
+            </div>
+          </div>
+          <div class="overview-download-row">
+            <div class="download-note">If refreshed, your timeline won't save. Download as a PDF to capture!</div>
+            <button
+              id="download-pdf-btn"
+              class="button button--secondary"
+              type="button"
+            >
+              Download as PDF
+            </button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div
+      id="metadata-modal"
+      class="metadata-modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="metadata-title"
+    >
+      <div class="metadata-modal">
+        <h3 id="metadata-title">Edit photo details</h3>
+        <div class="metadata-body">
+          <div class="metadata-preview">
+            <img id="metadata-preview-img" src="" alt="Photo preview" />
+          </div>
+          <div class="metadata-form">
+            <div class="metadata-field">
+              <label for="photo-title">Title</label>
+              <input id="photo-title" type="text" placeholder="Add a title" />
+            </div>
+            <div class="metadata-field">
+              <label for="photo-description">Description</label>
+              <textarea
+                id="photo-description"
+                placeholder="Add a description"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="metadata-actions">
+          <button
+            id="metadata-cancel"
+            class="button button--secondary"
+            type="button"
+          >
+            Cancel
+          </button>
+          <button id="metadata-save" class="button" type="button">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div>
+        <strong>Build Your Memory Lane</strong>
+        <div class="footer-subtitle">
+          Create chronological timelines from your photos.
+        </div>
+      </div>
+      <div class="footer-credit">Crafted by Lauren Kim</div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+      // Minimal EXIF DateTimeOriginal parser (best-effort)
+      async function getExifDate(file) {
+        try {
+          const buffer = await file.arrayBuffer();
+          const dv = new DataView(buffer);
+          if (dv.getUint16(0) !== 0xffd8) return null;
+          let offset = 2;
+          const length = dv.byteLength;
+          while (offset < length) {
+            const marker = dv.getUint16(offset);
+            offset += 2;
+            const size = dv.getUint16(offset);
+            if (marker === 0xffe1) {
+              const exifHeader = String.fromCharCode(
+                dv.getUint8(offset + 2),
+                dv.getUint8(offset + 3),
+                dv.getUint8(offset + 4),
+                dv.getUint8(offset + 5),
+                dv.getUint8(offset + 6),
+                dv.getUint8(offset + 7),
+              );
+              if (exifHeader !== "Exif\0\0") break;
+              const tiffOffset = offset + 8;
+              const endianness = dv.getUint16(tiffOffset);
+              const little = endianness === 0x4949;
+              const getUint16 = (off) =>
+                little ? dv.getUint16(off, true) : dv.getUint16(off, false);
+              const getUint32 = (off) =>
+                little ? dv.getUint32(off, true) : dv.getUint32(off, false);
+              const firstIFDOffset = getUint32(tiffOffset + 4);
+              const ifdStart = tiffOffset + firstIFDOffset;
+              const entries = getUint16(ifdStart);
+              for (let i = 0; i < entries; i++) {
+                const entryOffset = ifdStart + 2 + i * 12;
+                const tag = getUint16(entryOffset);
+                if (tag === 0x8769) {
+                  const exifPointer = getUint32(entryOffset + 8);
+                  const exifIFD = tiffOffset + exifPointer;
+                  const exifEntries = getUint16(exifIFD);
+                  for (let j = 0; j < exifEntries; j++) {
+                    const eOff = exifIFD + 2 + j * 12;
+                    const eTag = getUint16(eOff);
+                    if (eTag === 0x9003 || eTag === 0x0132) {
+                      const type = getUint16(eOff + 2);
+                      const count = getUint32(eOff + 4);
+                      if (type === 2) {
+                        let strOffset = getUint32(eOff + 8);
+                        if (strOffset > 0) strOffset = tiffOffset + strOffset;
+                        else strOffset = eOff + 8;
+                        let chars = [];
+                        for (let k = 0; k < count; k++) {
+                          const ch = dv.getUint8(strOffset + k);
+                          if (ch === 0) break;
+                          chars.push(String.fromCharCode(ch));
+                        }
+                        const dateStr = chars.join("");
+                        const normalized = dateStr.replace(
+                          /^([0-9]{4}):([0-9]{2}):([0-9]{2})/,
+                          "$1-$2-$3",
+                        );
+                        const parsed = new Date(normalized);
+                        if (!isNaN(parsed)) return parsed;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            offset += size;
+          }
+        } catch (e) {
+          // ignore
+        }
+        return null;
+      }
+
+      const MAX_UPLOAD_BATCH = 10;
+
+      const fileInput = document.getElementById("file-input");
+      const selectBtn = document.getElementById("select-btn");
+      const dropzone = document.getElementById("dropzone");
+      const sortSelect = document.getElementById("sort-select");
+      const progressOverlay = document.getElementById("progress-overlay");
+      const progressBar = document.getElementById("progress-bar");
+      const progressText = document.getElementById("progress-text");
+      const uploadWarning = document.getElementById("upload-warning");
+      const overviewCanvas = document.getElementById("overview-canvas");
+      const overviewTrack = document.getElementById("overview-track");
+      const overviewActions = document.querySelector(".overview-actions");
+      const zoomInBtn = document.getElementById("zoom-in-btn");
+      const zoomOutBtn = document.getElementById("zoom-out-btn");
+      const uploadedHeading = document.getElementById("uploaded-heading");
+      const uploadedHeadingActions = document.getElementById(
+        "uploaded-heading-actions",
+      );
+      const downloadPdfBtn = document.getElementById("download-pdf-btn");
+      const recenterBtn = document.getElementById("recenter-btn");
+
+      // Zoom bounds for the timeline canvas. "Fully zoomed out" (the
+      // default view when the Timeline tab is first opened) uses ZOOM_MIN.
+      const ZOOM_MIN = 0.7;
+      const ZOOM_MAX = 2;
+
+      let items = [];
+      let nextItemId = 0;
+
+      selectBtn.addEventListener("click", () => fileInput.click());
+      fileInput.addEventListener("change", (e) => {
+        handleFiles(e.target.files);
+        fileInput.value = "";
+      });
+
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((evt) => {
+        dropzone.addEventListener(evt, (e) => e.preventDefault());
+      });
+      dropzone.addEventListener("drop", (e) => {
+        const dt = e.dataTransfer;
+        if (dt && dt.files) handleFiles(dt.files);
+      });
+
+      function showUploadWarning(message) {
+        if (!uploadWarning) return;
+        uploadWarning.textContent = message;
+        uploadWarning.style.display = "block";
+      }
+      function hideUploadWarning() {
+        if (!uploadWarning) return;
+        uploadWarning.style.display = "none";
+        uploadWarning.textContent = "";
+      }
+
+      // HEIC/HEIF (the default format for iPhone photos) isn't natively
+      // decodable by most browsers other than Safari, so we convert it to
+      // a JPEG blob in-browser before displaying it.
+      const HEIC_MIME_TYPES = [
+        "image/heic",
+        "image/heif",
+        "image/heic-sequence",
+        "image/heif-sequence",
+      ];
+      function isHeicFile(file) {
+        const type = (file.type || "").toLowerCase();
+        if (HEIC_MIME_TYPES.includes(type)) return true;
+        const name = (file.name || "").toLowerCase();
+        return name.endsWith(".heic") || name.endsWith(".heif");
+      }
+
+      async function getDisplaySrc(file) {
+        if (!isHeicFile(file)) {
+          return { src: URL.createObjectURL(file), converted: false };
+        }
+        if (typeof heic2any !== "function") {
+          // Conversion library failed to load (e.g. offline) — fall back
+          // to the original file, which may not render in this browser.
+          return { src: URL.createObjectURL(file), converted: false };
+        }
+        try {
+          const result = await heic2any({
+            blob: file,
+            toType: "image/jpeg",
+            quality: 0.85,
+          });
+          const jpegBlob = Array.isArray(result) ? result[0] : result;
+          return { src: URL.createObjectURL(jpegBlob), converted: true };
+        } catch (err) {
+          console.warn("HEIC conversion failed for", file.name, err);
+          return {
+            src: URL.createObjectURL(file),
+            converted: false,
+            error: true,
+          };
+        }
+      }
+
+      async function handleFiles(fileList) {
+        let files = Array.from(fileList).filter((f) => {
+          if (f.type && f.type.startsWith("image")) return true;
+          // Some browsers/OS combos report no MIME type for HEIC/HEIF files
+          const name = (f.name || "").toLowerCase();
+          return /\.(heic|heif|jpe?g|png|gif|webp|bmp|tiff?)$/.test(name);
+        });
+
+        if (files.length === 0) return;
+
+        hideUploadWarning();
+        if (files.length > MAX_UPLOAD_BATCH) {
+          showUploadWarning(
+            `You selected ${files.length} photos. Only the first ${MAX_UPLOAD_BATCH} were added — upload the rest in a separate batch.`,
+          );
+          files = files.slice(0, MAX_UPLOAD_BATCH);
+        }
+
+        const total = files.length;
+
+        if (progressOverlay) progressOverlay.style.display = "flex";
+        if (progressBar) progressBar.style.width = "0%";
+        if (progressText) progressText.textContent = "0%";
+
+        let conversionFailed = false;
+        let processed = 0;
+        for (const file of files) {
+          const exifDate = await getExifDate(file);
+          const date = exifDate || new Date(file.lastModified);
+          const { src, error } = await getDisplaySrc(file);
+          if (error) conversionFailed = true;
+          items.push({ id: nextItemId++, file, date, src, name: file.name });
+
+          processed += 1;
+          const pct = Math.round((processed / total) * 100);
+          if (progressBar) progressBar.style.width = pct + "%";
+          if (progressText) progressText.textContent = pct + "%";
+        }
+
+        setTimeout(() => {
+          if (progressOverlay) progressOverlay.style.display = "none";
+        }, 250);
+
+        if (conversionFailed) {
+          showUploadWarning(
+            "Some HEIC photos couldn't be converted for preview, but were still added.",
+          );
+        }
+
+        sortAndRender("asc");
+      }
+
+      function sortAndRender(direction = "asc") {
+        items.sort((a, b) =>
+          direction === "asc" ? a.date - b.date : b.date - a.date,
+        );
+        renderOverview(items);
+        renderUploadedGrid(items);
+      }
+
+      function renderUploadedGrid(list) {
+        const grid = document.getElementById("uploaded-grid");
+        if (!grid) return;
+
+        if (uploadedHeading) {
+          uploadedHeading.style.display = list.length > 0 ? "block" : "none";
+        }
+        if (overviewActions) {
+          overviewActions.style.display = list.length > 0 ? "flex" : "none";
+        }
+
+        grid.innerHTML = "";
+        list.forEach((item) => {
+          const card = document.createElement("div");
+          card.className = "uploaded-card";
+          card.innerHTML = `
+            <button class="card-delete-btn" type="button" data-id="${item.id}" title="Delete photo" aria-label="Delete ${item.name}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <div class="uploaded-thumb-wrap"><img class="uploaded-thumb" src="${item.src}" alt="${item.name}" loading="lazy"></div>
+            <div class="uploaded-name">${item.name}</div>
+            <div class="uploaded-date">${item.date.toLocaleDateString()}</div>
+          `;
+          grid.appendChild(card);
+        });
+
+        if (uploadedHeadingActions) {
+          uploadedHeadingActions.innerHTML = "";
+          if (list.length > 0) {
+            const viewBtn = document.createElement("button");
+            viewBtn.type = "button";
+            viewBtn.className =
+              "button button--secondary view-timeline-inline-btn";
+            viewBtn.id = "view-timeline-btn";
+            viewBtn.innerHTML = "View timeline &rarr;";
+            viewBtn.addEventListener("click", () => {
+              setZoom(ZOOM_MIN);
+              activateTab("timeline");
+              setTimeout(scrollTimelineOnOpen, 0);
+            });
+            uploadedHeadingActions.appendChild(viewBtn);
+          }
+        }
+      }
+
+      function removeItem(id) {
+        const index = items.findIndex((i) => i.id === id);
+        if (index === -1) return;
+        URL.revokeObjectURL(items[index].src);
+        items.splice(index, 1);
+        renderOverview(items);
+        renderUploadedGrid(items);
+      }
+
+      const uploadedGridEl = document.getElementById("uploaded-grid");
+      if (uploadedGridEl) {
+        uploadedGridEl.addEventListener("click", (e) => {
+          const deleteBtn = e.target.closest(".card-delete-btn");
+          if (deleteBtn) {
+            removeItem(Number(deleteBtn.dataset.id));
+            return;
+          }
+          const viewBtn = e.target.closest(".view-timeline-inline-btn");
+          if (viewBtn) {
+            activateTab("timeline");
+          }
+        });
+      }
+
+      const metadataModal = document.getElementById("metadata-modal");
+      const photoTitleInput = document.getElementById("photo-title");
+      const photoDescriptionInput =
+        document.getElementById("photo-description");
+      const metadataPreviewImage = document.getElementById(
+        "metadata-preview-img",
+      );
+      const metadataSaveBtn = document.getElementById("metadata-save");
+      const metadataCancelBtn = document.getElementById("metadata-cancel");
+      let activePhotoId = null;
+
+      function openMetadataModal(item) {
+        activePhotoId = item.id;
+        if (
+          !metadataModal ||
+          !photoTitleInput ||
+          !photoDescriptionInput ||
+          !metadataPreviewImage
+        )
+          return;
+        metadataPreviewImage.src = item.src;
+        metadataPreviewImage.alt = item.name;
+        photoTitleInput.value = item.title || "";
+        photoDescriptionInput.value = item.description || "";
+        metadataModal.classList.add("active");
+        photoTitleInput.focus();
+      }
+
+      function closeMetadataModal() {
+        if (!metadataModal) return;
+        metadataModal.classList.remove("active");
+        activePhotoId = null;
+      }
+
+      metadataCancelBtn?.addEventListener("click", closeMetadataModal);
+      metadataModal?.addEventListener("click", (e) => {
+        if (e.target === metadataModal) closeMetadataModal();
+      });
+      metadataSaveBtn?.addEventListener("click", () => {
+        if (activePhotoId === null) return;
+        const item = items.find((i) => i.id === activePhotoId);
+        if (!item) return;
+        item.title = photoTitleInput.value.trim();
+        item.description = photoDescriptionInput.value.trim();
+        closeMetadataModal();
+        renderOverview(items);
+        renderUploadedGrid(items);
+      });
+
+      // Deterministic pseudo-random generator seeded by an integer, so the
+      // "tossed" pile look is stable across re-renders/sorts rather than
+      // reshuffling randomly every time (which plain Math.random() would do).
+      function seededRandom(seed) {
+        let t = (seed + 0x6d2b79f5) | 0;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      }
+
+      function renderOverview(list) {
+        if (!overviewTrack) return;
+        overviewTrack.innerHTML = "";
+        overviewTrack.classList.toggle("empty-state", list.length === 0);
+        if (list.length === 0) {
+          overviewTrack.innerHTML =
+            '<p class="muted overview-empty">No photos yet. Add some from the Upload Photos tab to see your Memory Lane.</p>';
+          return;
+        }
+
+        let lastYear = null;
+        let lastDateKey = null;
+        let currentGroup = null;
+        let currentGroupIndex = 0;
+
+        list.forEach((item) => {
+          const year = item.date.getFullYear();
+          const dateKey = item.date.toISOString().split("T")[0];
+
+          if (year !== lastYear) {
+            const yearNode = document.createElement("div");
+            yearNode.className = "overview-year";
+            yearNode.textContent = year;
+            overviewTrack.appendChild(yearNode);
+            lastYear = year;
+            lastDateKey = null;
+            currentGroup = null;
+            currentGroupIndex = 0;
+          }
+
+          if (dateKey !== lastDateKey) {
+            currentGroup = document.createElement("div");
+            currentGroup.className = "overview-group";
+
+            const groupStack = document.createElement("div");
+            groupStack.className = "overview-group-stack";
+            currentGroup.appendChild(groupStack);
+
+            const dateNode = document.createElement("div");
+            dateNode.className = "overview-date-group";
+            dateNode.textContent = item.date.toLocaleDateString();
+            currentGroup.appendChild(dateNode);
+
+            overviewTrack.appendChild(currentGroup);
+            lastDateKey = dateKey;
+            currentGroupIndex = 0;
+          }
+
+          if (!currentGroup) return;
+          const groupStack = currentGroup.querySelector(
+            ".overview-group-stack",
+          );
+          if (!groupStack) return;
+
+          const node = document.createElement("div");
+          node.className = "overview-item";
+
+          // Same-date photos get a hand-tossed pile look: each subsequent
+          // photo overlaps the previous one, peeking up and to the side,
+          // with a bit of per-photo rotation/jitter for an organic feel.
+          const jitterX = (seededRandom(item.id * 7 + 1) - 0.5) * 14; // ~ -7px..7px
+          const jitterY = (seededRandom(item.id * 7 + 2) - 0.5) * 10; // ~ -5px..5px
+          const rotate = (seededRandom(item.id * 7 + 3) - 0.5) * 14; // ~ -7deg..7deg
+          const rise = currentGroupIndex * 6; // each photo peeks a little higher
+          const overlapMargin = currentGroupIndex === 0 ? 0 : -70; // pulls photos into a pile
+
+          node.style.setProperty("--group-left", `${jitterX.toFixed(1)}px`);
+          node.style.setProperty(
+            "--group-top",
+            `${(jitterY - rise).toFixed(1)}px`,
+          );
+          node.style.setProperty("--group-rotate", `${rotate.toFixed(1)}deg`);
+          node.style.setProperty("--group-margin", `${overlapMargin}px`);
+          node.style.setProperty("--group-z", `${100 + currentGroupIndex}`);
+
+          node.innerHTML = `
+            <div class="overview-dot"></div>
+            ${
+              item.title || item.description
+                ? `
+              <div class="overview-caption">
+                ${item.title ? `<strong>${item.title}</strong>` : ""}
+                ${item.description ? `${item.description}` : ""}
+              </div>
+            `
+                : ""
+            }
+            <div class="overview-thumb-wrap"><img class="overview-thumb" src="${item.src}" alt="${item.name}" loading="lazy"></div>
+
+          `;
+          node.addEventListener("click", () => openMetadataModal(item));
+          groupStack.appendChild(node);
+          currentGroupIndex += 1;
+        });
+      }
+
+      if (sortSelect) {
+        sortSelect.addEventListener("change", () =>
+          sortAndRender(sortSelect.value),
+        );
+      }
+
+      function scrollTimelineOnOpen() {
+        if (!overviewCanvas) return;
+        // Left-align: show the start of the timeline (earliest date when
+        // sorted oldest-to-recent) rather than scrolling to the middle.
+        overviewCanvas.scrollLeft = 0;
+      }
+
+      // Renders the full timeline (not just what's currently scrolled into
+      // view, and ignoring the current zoom level) into a single image and
+      // saves it as a PDF.
+      async function downloadTimelineAsPDF() {
+        if (!overviewTrack || !overviewCanvas || !downloadPdfBtn) return;
+
+        if (items.length === 0) {
+          alert("Add some photos first to generate a timeline PDF.");
+          return;
+        }
+
+        if (typeof html2canvas !== "function" || !window.jspdf) {
+          alert(
+            "PDF export couldn't load. Check your connection and try again.",
+          );
+          return;
+        }
+
+        const originalLabel = downloadPdfBtn.textContent;
+        downloadPdfBtn.disabled = true;
+        downloadPdfBtn.textContent = "Preparing PDF…";
+
+        // Temporarily un-clip and un-scale the canvas so the capture
+        // includes the entire timeline, not just the visible/scrolled
+        // portion or the current zoom level.
+        const prevOverflowX = overviewCanvas.style.overflowX;
+        const prevOverflowY = overviewCanvas.style.overflowY;
+        const prevHeight = overviewCanvas.style.height;
+        const prevMinHeight = overviewCanvas.style.minHeight;
+        const prevTransform = overviewTrack.style.transform;
+
+        overviewCanvas.style.overflowX = "visible";
+        overviewCanvas.style.overflowY = "visible";
+        overviewCanvas.style.height = "auto";
+        overviewCanvas.style.minHeight = "0";
+        overviewTrack.style.transform = "scale(1)";
+
+        // Let layout settle before capturing.
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        try {
+          const canvas = await html2canvas(overviewTrack, {
+            backgroundColor: "#fbfbfe",
+            scale: 2,
+            useCORS: true,
+          });
+
+          const { jsPDF } = window.jspdf;
+          const imgWidth = canvas.width;
+          const imgHeight = canvas.height;
+          const orientation = imgWidth >= imgHeight ? "l" : "p";
+
+          const pdf = new jsPDF({
+            orientation,
+            unit: "px",
+            format: [imgWidth, imgHeight],
+          });
+
+          const imgData = canvas.toDataURL("image/jpeg", 0.92);
+          pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight);
+          pdf.save("memory-lane-timeline.pdf");
+        } catch (err) {
+          console.error("Failed to generate timeline PDF", err);
+          alert("Something went wrong generating the PDF. Please try again.");
+        } finally {
+          overviewCanvas.style.overflowX = prevOverflowX;
+          overviewCanvas.style.overflowY = prevOverflowY;
+          overviewCanvas.style.height = prevHeight;
+          overviewCanvas.style.minHeight = prevMinHeight;
+          overviewTrack.style.transform = prevTransform;
+          downloadPdfBtn.disabled = false;
+          downloadPdfBtn.textContent = originalLabel;
+        }
+      }
+
+      downloadPdfBtn?.addEventListener("click", downloadTimelineAsPDF);
+
+      function setZoom(scale, originX = "left", originY = "top") {
+        const clamped = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, scale));
+        if (!overviewTrack) return;
+        overviewTrack.style.transformOrigin = `${originX} ${originY}`;
+        overviewTrack.style.transform = `scale(${clamped})`;
+        overviewTrack.dataset.zoom = clamped;
+      }
+
+      function changeZoom(delta, originX, originY) {
+        const current = Number(overviewTrack?.dataset.zoom || 1);
+        setZoom(current + delta, originX, originY);
+      }
+
+      zoomInBtn?.addEventListener("click", () => changeZoom(0.1));
+      zoomOutBtn?.addEventListener("click", () => changeZoom(-0.1));
+
+      recenterBtn?.addEventListener("click", () => {
+        setZoom(ZOOM_MIN);
+        scrollTimelineOnOpen();
+      });
+
+      overviewCanvas?.addEventListener("wheel", (event) => {
+        if (!overviewCanvas || !overviewTrack) return;
+        event.preventDefault();
+        const rect = overviewTrack.getBoundingClientRect();
+        const offsetX = event.clientX - rect.left;
+        const offsetY = event.clientY - rect.top;
+        const delta = event.deltaY < 0 ? 0.02 : -0.02;
+        changeZoom(delta, `${offsetX}px`, `${offsetY}px`);
+      });
+
+      // --- Drag-to-scroll for the timeline canvas ---
+      // Pointer capture is deferred until the pointer has actually moved
+      // past a small threshold. This way a plain click (no movement) never
+      // captures the pointer, so the resulting "click" event is delivered
+      // to the photo the user clicked on (opening the metadata modal)
+      // instead of being swallowed by the canvas.
+      let isDragging = false;
+      let dragStartX = 0;
+      let dragStartY = 0;
+      let scrollStartX = 0;
+      let scrollStartY = 0;
+      let activePointerId = null;
+      const DRAG_THRESHOLD = 4; // px of movement before treating as a drag
+
+      overviewCanvas?.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "mouse" && event.button !== 0) return;
+        if (event.target.closest(".timeline-control-btn")) return;
+        activePointerId = event.pointerId;
+        dragStartX = event.clientX;
+        dragStartY = event.clientY;
+        scrollStartX = overviewCanvas.scrollLeft;
+        scrollStartY = overviewCanvas.scrollTop;
+        // isDragging stays false here — we don't capture the pointer yet.
+      });
+
+      overviewCanvas?.addEventListener("pointermove", (event) => {
+        if (
+          event.pointerId !== activePointerId ||
+          !overviewCanvas ||
+          activePointerId === null
+        )
+          return;
+
+        const deltaX = event.clientX - dragStartX;
+        const deltaY = event.clientY - dragStartY;
+
+        if (!isDragging) {
+          if (
+            Math.abs(deltaX) < DRAG_THRESHOLD &&
+            Math.abs(deltaY) < DRAG_THRESHOLD
+          ) {
+            return; // not enough movement yet — could still just be a click
+          }
+          isDragging = true;
+          overviewCanvas.setPointerCapture(activePointerId);
+          overviewCanvas.classList.add("dragging");
+        }
+
+        overviewCanvas.scrollLeft = scrollStartX - deltaX;
+        overviewCanvas.scrollTop = scrollStartY - deltaY;
+      });
+
+      const stopDragging = () => {
+        if (
+          activePointerId !== null &&
+          overviewCanvas?.hasPointerCapture?.(activePointerId)
+        ) {
+          overviewCanvas.releasePointerCapture(activePointerId);
+        }
+        isDragging = false;
+        activePointerId = null;
+        overviewCanvas?.classList.remove("dragging");
+      };
+
+      overviewCanvas?.addEventListener("pointerup", stopDragging);
+      overviewCanvas?.addEventListener("pointercancel", stopDragging);
+      overviewCanvas?.addEventListener("pointerleave", stopDragging);
+
+      setZoom(1);
+      renderOverview(items);
+      renderUploadedGrid(items);
+
+      // Landing -> app shell
+      const startBtn = document.getElementById("start-btn");
+      const landing = document.getElementById("landing");
+      const appShell = document.getElementById("app-shell");
+      if (startBtn) {
+        startBtn.addEventListener("click", () => {
+          if (landing) landing.style.display = "none";
+          if (appShell) appShell.style.display = "block";
+          activateTab("upload");
+          if (selectBtn) selectBtn.focus();
+        });
+      }
+
+      if (landing) {
+        landing.addEventListener("pointermove", (event) => {
+          const rect = landing.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width) * 100;
+          const y = ((event.clientY - rect.top) / rect.height) * 100;
+          landing.style.setProperty("--landing-gradient-x", `${x}%`);
+          landing.style.setProperty("--landing-gradient-y", `${y}%`);
+        });
+        landing.addEventListener("pointerleave", () => {
+          landing.style.setProperty("--landing-gradient-x", "50%");
+          landing.style.setProperty("--landing-gradient-y", "50%");
+        });
+      }
+
+      // Tabs
+      const tabBtnUpload = document.getElementById("tab-btn-upload");
+      const tabBtnTimeline = document.getElementById("tab-btn-timeline");
+      const panelUpload = document.getElementById("panel-upload");
+      const panelTimeline = document.getElementById("panel-timeline");
+
+      function activateTab(name) {
+        const isUpload = name === "upload";
+        tabBtnUpload.classList.toggle("active", isUpload);
+        tabBtnTimeline.classList.toggle("active", !isUpload);
+        tabBtnUpload.setAttribute("aria-selected", String(isUpload));
+        tabBtnTimeline.setAttribute("aria-selected", String(!isUpload));
+        panelUpload.classList.toggle("active", isUpload);
+        panelTimeline.classList.toggle("active", !isUpload);
+      }
+
+      tabBtnUpload.addEventListener("click", () => activateTab("upload"));
+      tabBtnTimeline.addEventListener("click", () => {
+        setZoom(ZOOM_MIN);
+        activateTab("timeline");
+        setTimeout(scrollTimelineOnOpen, 0);
+      });
+
+      const landingBtn = document.getElementById("landing-btn");
+      if (landingBtn) {
+        landingBtn.addEventListener("click", () => {
+          if (landing) landing.style.display = "grid";
+          if (appShell) appShell.style.display = "none";
+        });
+      }
+    </script>
+  </body>
+</html>
