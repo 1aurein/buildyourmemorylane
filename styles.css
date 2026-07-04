@@ -935,6 +935,29 @@ header {
       scale(1);
   }
 }
+
+.landing h1 {
+  margin: 0;
+  font-size: 3.5rem;
+  padding: 0 0 8px;
+  color: var(--text);
+}
+
+.bounce-word {
+  display: inline-block;
+  animation: wordBounce 2.2s ease-in-out infinite;
+}
+
+@keyframes wordBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
 .landing-card {
   width: min(720px, calc(100% - 48px));
   background: transparent;
